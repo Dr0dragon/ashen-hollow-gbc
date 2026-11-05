@@ -231,7 +231,7 @@ static uint8_t ncards(void){uint8_t i,n=0;for(i=0;i<NMON;i++)if(P.cards&(1<<i))n
 static void cards(void){
  uint8_t sel=0,own,x,y;
  for(;;){
-  own=(P.cards>>sel)&1;
+  own=(P.cards&(1<<sel))?1:0;
   scene_begin();
   set_bkg_palette(0,1,PM[own?sel:6]);pal_ui();
   load_monster(sel);
@@ -498,12 +498,13 @@ static void title(void){
  else{keep=0;if(hs){load_game();keep=P.cards;}newgame();P.cards=keep;}
 }
 static void gameover(void){
- uint8_t keep;
+ uint8_t keep_cards;
  scene_begin();pal_ui();ctxt(7,"GAME OVER",7);ctxt(10,"PRESS A",6);scene_end();
  do frame();while(!HIT(J_A));
- keep=P.cards;
- if(!load_game()){newgame();P.cards=keep;}
- P.hp=P.mhp;P.mp=P.mmp;grace=3;
+ keep_cards = P.cards; // Preserve your monster collection cards if desired
+ newgame();            // Resets level, stats, HP/MP, gold, and x=2, y=3
+ P.cards = keep_cards; // Restore collected cards
+ save_game();          // Save the fresh lvl 1 respawn state
 }
 static void play(void){
  uint8_t r;
