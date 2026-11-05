@@ -1,0 +1,15 @@
+name: build-rom
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install GBDK-2020 and build
+        run: |
+          curl -L https://github.com/gbdk-2020/gbdk-2020/releases/download/4.2.0/gbdk-linux64.tar.gz | tar xz -C "$HOME"
+          GBDK_HOME="$HOME/gbdk" ./build.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ashen_hollow_gbc
+          path: build/ashen_hollow.gbc
