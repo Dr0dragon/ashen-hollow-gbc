@@ -8,7 +8,8 @@ jobs:
       - name: Install GBDK-2020 and build
         run: |
           curl -L https://github.com/gbdk-2020/gbdk-2020/releases/download/4.2.0/gbdk-linux64.tar.gz | tar xz -C "$HOME"
-          GBDK_HOME="$HOME/gbdk" sh ./build.sh
+          mkdir -p build
+          "$HOME/gbdk/bin/lcc" -Wm-yc -Wm-yt0x03 -Wm-yo2 -Wm-ya1 -Wm-yn"ASHENHOLLOW" -o build/ashen_hollow.gbc main.c
       - uses: actions/upload-artifact@v4
         with:
           name: ashen_hollow_gbc
